@@ -17,7 +17,7 @@ dist-ssr
 .env.local
 .env.*.local
 
-# Sensitive files - use Firebase Storage instead
+# Sensitive files
 public/profile-pic/*.jpg
 public/profile-pic/*.jpeg
 public/profile-pic/*.png

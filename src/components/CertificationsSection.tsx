@@ -140,12 +140,12 @@ const PdfThumbnail = ({ src, alt }: { src: string; alt: string }) => {
   );
 };
 
-const certificateImports = {}; // No local certificates - using Google Drive only
-
-const formatTitle = (fileNaimport.meta.glob<string>(
+const certificateImports = import.meta.glob<string>(
   "../assets/certificates/**/*.{png,jpg,jpeg,webp,pdf}",
   { eager: true, import: "default" }
 );
+
+const formatTitle = (fileName: string) => {
   const name = fileName
     .replace(/\.[^/.]+$/, "")
     .replace(/^CertificateOfCompletion_/, "")
@@ -162,7 +162,19 @@ const deriveCategoryKey = (path: string): CategoryKey => {
   const first = segments[certIndex + 1];
   const second = segments[certIndex + 2];
   const candidate = first === "participation" ? second : first;
-  if (candidate && candidate in categoryMeta) return candidate as CategoryKey;
+  
+  // Normalize the candidate to match category keys (lowercase, remove spaces)
+  const normalizedCandidate = candidate?.toLowerCase().replace(/\s+/g, "");
+  
+  // Check if the normalized candidate matches any category key
+  if (normalizedCandidate) {
+    for (const key in categoryMeta) {
+      if (key === normalizedCandidate || key.replace(/\s+/g, "") === normalizedCandidate) {
+        return key as CategoryKey;
+      }
+    }
+  }
+  
   return "other";
 };
 
@@ -179,7 +191,8 @@ export const CertificationsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   
-  coreturn Object.entries(certificateImports).map(([path, image]) => {
+  const derivedCertifications = useMemo(() => {
+    return Object.entries(certificateImports).map(([path, image]) => {
       const category = deriveCategoryKey(path);
       const meta = categoryMeta[category];
       const fileName = path.split("/").pop() ?? "Certificate";
@@ -196,8 +209,7 @@ export const CertificationsSection = () => {
         date: new Date().getFullYear().toString(),
         category,
       };
-    })
-    return googleDriveCerts;
+    });
   }, []);
 
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
@@ -238,8 +250,9 @@ export const CertificationsSection = () => {
     setIsModalOpen(false);
     setSelectedCert(null);
   };
-derivedCertifications.length + 1; //
-  const totalCertifications = certificateFolders.length + derivedCertifications.length + 1; // +folders +certs +1 for patent
+
+  const totalCertifications = derivedCertifications.length + 1; // +certs +1 for patent
+
 
   return (
     <section id="certifications" className="section-padding relative overflow-hidden">
@@ -356,10 +369,10 @@ derivedCertifications.length + 1; //
             </div>
           </div>
         </motion.div>
-ions Grid */}
+
+        {/* Certifications Grid */}
         <div className="grid md:grid-cols-3 gap-4">
-        <div className="grid md:grid-cols-3 gap-4">
-              {displayedCertifications.map((cert, index) => (
+          {displayedCertifications.map((cert, index) => (
             <motion.div
               key={cert.title}
               initial={{ opacity: 0, y: 50 }}
@@ -405,32 +418,8 @@ ions Grid */}
               </div>
             </motion.div>
           ))}
-        </div>
 
-        {filteredCertifications.length > certItemsPerPage && (
-          <div className="text-center mt-10">
-            <button
-              onClick={() => setShowMore(!showMore)}
-              className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:shadow-lg hover:shadow-primary/30 transition-all"
-            >
-              {showMore ? "Show Less" : "Load More Certificates"}
-            </button>
-          </div>
-        )}
-          </>
-        )}
-      </div>
-
-      {/* Modal */}
-      <CertificationModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        certification={selectedCert}
-      />
-    </section>
-  );
-};
-  {filteredCertifications.length === 0 && (
+          {filteredCertifications.length === 0 && (
             <div className="col-span-full text-center text-muted-foreground">
               Add certificates to src/assets/certificates to see them here.
             </div>
@@ -445,4 +434,16 @@ ions Grid */}
             >
               {showMore ? "Show Less" : "Load More Certificates"}
             </button>
-          </div
+          </div>
+        )}
+      </div>
+
+      {/* Modal */}
+      <CertificationModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        certification={selectedCert}
+      />
+    </section>
+  );
+};
