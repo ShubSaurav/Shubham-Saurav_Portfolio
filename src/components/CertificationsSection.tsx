@@ -166,10 +166,11 @@ const deriveCategoryKey = (path: string): CategoryKey => {
   // Normalize the candidate to match category keys (lowercase, remove spaces)
   const normalizedCandidate = candidate?.toLowerCase().replace(/\s+/g, "");
   
-  // Check if the normalized candidate matches any category key
+  // Check if the normalized candidate matches or starts with any category key
   if (normalizedCandidate) {
     for (const key in categoryMeta) {
-      if (key === normalizedCandidate || key.replace(/\s+/g, "") === normalizedCandidate) {
+      const normalizedKey = key.toLowerCase().replace(/\s+/g, "");
+      if (normalizedCandidate === normalizedKey || normalizedCandidate.startsWith(normalizedKey)) {
         return key as CategoryKey;
       }
     }

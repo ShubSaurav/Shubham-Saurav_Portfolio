@@ -28,9 +28,9 @@ public/gallery/about me/
 src/assets/gallery/*.jpg
 src/assets/gallery/*.jpeg
 src/assets/gallery/*.png
-*.pdf
-/certificates/
 public/certificates/
+
+# Certificates are tracked in src/assets/certificates/
 
 # Editor directories and files
 .vscode/*
