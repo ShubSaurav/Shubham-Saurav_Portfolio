@@ -19,18 +19,15 @@ dist-ssr
 
 # Sensitive files
 public/profile-pic/*.jpg
-public/profile-pic/*.jpeg
 public/profile-pic/*.png
 public/gallery/*.jpg
-public/gallery/*.jpeg
 public/gallery/*.png
-public/gallery/about me/
 src/assets/gallery/*.jpg
 src/assets/gallery/*.jpeg
 src/assets/gallery/*.png
 public/certificates/
 
-# Certificates are tracked in src/assets/certificates/
+# Profile and about me images are tracked
 
 # Editor directories and files
 .vscode/*
