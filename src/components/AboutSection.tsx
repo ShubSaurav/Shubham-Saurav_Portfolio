@@ -3,7 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Rocket, Award, Users, Code } from "lucide-react";
 
-const ABOUT_IMAGE = import.meta.env.VITE_ABOUT_IMAGE || "/gallery/about%20me/winning%20.jpeg";
+const ABOUT_IMAGE = import.meta.env.VITE_ABOUT_IMAGE || "/gallery/about%20me/winning.jpeg";
 
 const stats = [
   { icon: Code, value: "15+", label: "Projects Built" },
