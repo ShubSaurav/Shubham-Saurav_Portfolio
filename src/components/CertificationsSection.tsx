@@ -142,10 +142,7 @@ const PdfThumbnail = ({ src, alt }: { src: string; alt: string }) => {
   );
 };
 
-const certificateImports = import.meta.glob<string>(
-  "../assets/certificates/**/*.{png,jpg,jpeg,webp,pdf}",
-  { eager: true, import: "default" }
-);
+const certificateImports = {}; // No local certificates - using Google Drive only
 
 const formatTitle = (fileName: string) => {
   const name = fileName
@@ -182,27 +179,7 @@ export const CertificationsSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   
   const derivedCertifications = useMemo<Certification[]>(() => {
-    // Load local certificates from assets
-    const localCerts = Object.entries(certificateImports).map(([path, image]) => {
-      const category = deriveCategoryKey(path);
-      const meta = categoryMeta[category];
-      const fileName = path.split("/").pop() ?? "Certificate";
-
-      return {
-        title: formatTitle(fileName),
-        issuer: meta.issuer,
-        badge: meta.badge,
-        icon: meta.icon,
-        color: meta.color,
-        description: meta.description,
-        image,
-        link: image,
-        date: new Date().getFullYear().toString(),
-        category,
-      };
-    });
-
-    // Load certificates from Google Drive
+    // Load ONLY certificates from Google Drive configuration
     const googleDriveCerts = linkedinCertificates.map((cert) => {
       const meta = categoryMeta[cert.category];
       return {
@@ -219,8 +196,7 @@ export const CertificationsSection = () => {
       };
     });
 
-    // Combine both local and Google Drive certificates
-    return [...localCerts, ...googleDriveCerts];
+    return googleDriveCerts;
   }, []);
 
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
