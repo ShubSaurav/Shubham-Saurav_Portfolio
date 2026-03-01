@@ -6,6 +6,8 @@ import { Award, Cloud, Palette, Code, Trophy, LayoutGrid, Medal } from "lucide-r
 import { CertificationModal } from "./CertificationModal";
 import { GlobalWorkerOptions, getDocument } from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
+import { linkedinCertificates, getGoogleDrivePdfUrl } from "../config/certificates";
+import { getGoogleDriveThumbnailUrl } from "../lib/googleDriveHelper";
 
 const categoryMeta = {
   linkedin: {
@@ -178,8 +180,10 @@ const patentInfo = {
 export const CertificationsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
   const derivedCertifications = useMemo<Certification[]>(() => {
-    return Object.entries(certificateImports).map(([path, image]) => {
+    // Load local certificates from assets
+    const localCerts = Object.entries(certificateImports).map(([path, image]) => {
       const category = deriveCategoryKey(path);
       const meta = categoryMeta[category];
       const fileName = path.split("/").pop() ?? "Certificate";
@@ -197,6 +201,26 @@ export const CertificationsSection = () => {
         category,
       };
     });
+
+    // Load certificates from Google Drive
+    const googleDriveCerts = linkedinCertificates.map((cert) => {
+      const meta = categoryMeta[cert.category];
+      return {
+        title: cert.title,
+        issuer: cert.issuer,
+        badge: meta.badge,
+        icon: meta.icon,
+        color: meta.color,
+        description: meta.description,
+        image: getGoogleDrivePdfUrl(cert.fileId),
+        link: getGoogleDrivePdfUrl(cert.fileId),
+        date: cert.date,
+        category: cert.category,
+      };
+    });
+
+    // Combine both local and Google Drive certificates
+    return [...localCerts, ...googleDriveCerts];
   }, []);
 
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
