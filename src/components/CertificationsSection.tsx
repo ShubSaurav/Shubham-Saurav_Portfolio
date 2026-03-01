@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
-import { Award, Cloud, Palette, Code, Trophy, LayoutGrid, Medal } from "lucide-react";
+import { Award, Cloud, Palette, Code, Trophy, LayoutGrid, Medal, ExternalLink, FolderOpen } from "lucide-react";
 import { CertificationModal } from "./CertificationModal";
 import { GlobalWorkerOptions, getDocument } from "pdfjs-dist";
 import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
-import { linkedinCertificates, getGoogleDrivePdfUrl } from "../config/certificates";
+import { certificateFolders, individualCertificates, getGoogleDrivePdfUrl, getGoogleDriveFolderLink } from "../config/certificates";
 import { getGoogleDriveThumbnailUrl } from "../lib/googleDriveHelper";
 
 const categoryMeta = {
@@ -179,8 +179,8 @@ export const CertificationsSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   
   const derivedCertifications = useMemo<Certification[]>(() => {
-    // Load ONLY certificates from Google Drive configuration
-    const googleDriveCerts = linkedinCertificates.map((cert) => {
+    // Load individual certificates from Google Drive configuration
+    const googleDriveCerts = individualCertificates.map((cert) => {
       const meta = categoryMeta[cert.category];
       return {
         title: cert.title,
@@ -238,7 +238,7 @@ export const CertificationsSection = () => {
     setSelectedCert(null);
   };
 
-  const totalCertifications = derivedCertifications.length + 1; // +1 for patent
+  const totalCertifications = certificateFolders.length + derivedCertifications.length + 1; // +folders +certs +1 for patent
 
   return (
     <section id="certifications" className="section-padding relative overflow-hidden">
@@ -356,9 +356,77 @@ export const CertificationsSection = () => {
           </div>
         </motion.div>
 
-        {/* Certifications Grid */}
-        <div className="grid md:grid-cols-3 gap-4">
-          {displayedCertifications.map((cert, index) => (
+        {/* Certificate Folders Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mb-12"
+        >
+          <h3 className="font-heading text-2xl font-bold mb-6 flex items-center gap-2">
+            <FolderOpen className="text-primary" size={28} />
+            Certificate Collections
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {certificateFolders.map((folder, index) => {
+              const meta = categoryMeta[folder.category];
+              const Icon = meta.icon;
+              
+              return (
+                <motion.a
+                  key={folder.folderId}
+                  href={getGoogleDriveFolderLink(folder.folderId)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                  className="glass-card p-6 hover-glow group cursor-pointer block"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`w-16 h-16 rounded-xl bg-${meta.color}/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+                      <Icon size={32} className={`text-${meta.color}`} />
+                    </div>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-heading text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                          {folder.name}
+                        </h4>
+                        <ExternalLink size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <span className={`px-2 py-1 rounded-md text-xs font-medium bg-${meta.color}/20 text-${meta.color}`}>
+                          {meta.label}
+                        </span>
+                        <span className="px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground">
+                          {folder.issuer}
+                        </span>
+                      </div>
+                      
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {folder.description}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 text-primary text-sm font-medium">
+                        <span>View all certificates</span>
+                        <span>→</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.a>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Individual Certifications Grid */}
+        {individualCertificates.length > 0 && (
+          <>
+            <h3 className="font-heading text-2xl font-bold mb-6">Featured Certificates</h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              {displayedCertifications.map((cert, index) => (
             <motion.div
               key={cert.title}
               initial={{ opacity: 0, y: 50 }}
@@ -404,11 +472,6 @@ export const CertificationsSection = () => {
               </div>
             </motion.div>
           ))}
-          {filteredCertifications.length === 0 && (
-            <div className="col-span-full text-center text-muted-foreground">
-              Upload certificates to src/assets/certificates to see them listed here.
-            </div>
-          )}
         </div>
 
         {filteredCertifications.length > certItemsPerPage && (
@@ -420,6 +483,8 @@ export const CertificationsSection = () => {
               {showMore ? "Show Less" : "Load More Certificates"}
             </button>
           </div>
+        )}
+          </>
         )}
       </div>
 
