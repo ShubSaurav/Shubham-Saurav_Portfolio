@@ -6,6 +6,8 @@ type GalleryItem = {
   title: string;
   file: string;
   description?: string;
+  group?: string;
+  order?: number;
 };
 
 const GALLERY_FALLBACK = "https://placehold.co/800x600?text=Add+image+to+public/gallery";
@@ -25,6 +27,29 @@ const formatTitle = (fileName: string) => {
   return name;
 };
 
+const extractMetaFromFileName = (filePath: string) => {
+  const rawName = filePath.split("/").pop() ?? "Image";
+  const baseName = rawName.replace(/\.[^/.]+$/, "").trim();
+  const match = baseName.match(/^(.*?)(?:\s+|[-_])(\d+)$/);
+
+  if (!match) {
+    return {
+      title: formatTitle(baseName),
+      group: formatTitle(baseName),
+      order: Number.MAX_SAFE_INTEGER,
+    };
+  }
+
+  const group = formatTitle(match[1].trim());
+  const order = Number(match[2]);
+
+  return {
+    title: `${group} ${order}`,
+    group,
+    order,
+  };
+};
+
 const discoverGalleryItems = (): GalleryItem[] => {
   if (Object.keys(galleryImports).length === 0) {
     return [
@@ -37,14 +62,27 @@ const discoverGalleryItems = (): GalleryItem[] => {
     ];
   }
 
-  const items = Object.entries(galleryImports).map(([path, image], index) => ({
-    title: formatTitle(path.split("/").pop() ?? "Image"),
+  const items = Object.entries(galleryImports).map(([path, image]) => {
+    const meta = extractMetaFromFileName(path);
+
+    return {
+    title: meta.title,
     file: image,
-    description: `Featured in gallery`,
-  }));
+    description: meta.group,
+    group: meta.group,
+    order: meta.order,
+  }});
   
-  // Sort by file name in reverse order to get latest images first
-  return items.sort((a, b) => b.file.localeCompare(a.file));
+  return items.sort((a, b) => {
+    const groupCompare = (a.group ?? "").localeCompare(b.group ?? "", undefined, {
+      sensitivity: "base",
+      numeric: true,
+    });
+
+    if (groupCompare !== 0) return groupCompare;
+
+    return (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER);
+  });
 };
 
 export const GallerySection = () => {
@@ -239,6 +277,7 @@ export const GallerySection = () => {
                   >
                     <div className="w-full">
                       <p className="text-white font-semibold text-sm">{item.title}</p>
+                      <p className="text-white/80 text-xs mt-1">{item.description}</p>
                       <p className="text-white/70 text-xs mt-1">Click to view</p>
                     </div>
                   </motion.div>
