@@ -73,7 +73,7 @@ const discoverGalleryItems = (): GalleryItem[] => {
     return {
     title: meta.title,
     file: image,
-    description: meta.group,
+    description: undefined,
     group: meta.group,
     order: meta.order,
   }});
@@ -282,7 +282,6 @@ export const GallerySection = () => {
                   >
                     <div className="w-full">
                       <p className="text-white font-semibold text-sm">{item.title}</p>
-                      <p className="text-white/80 text-xs mt-1">{item.description}</p>
                       <p className="text-white/70 text-xs mt-1">Click to view</p>
                     </div>
                   </motion.div>
