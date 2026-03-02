@@ -47,10 +47,10 @@ const projects = [
   },
   {
     title: "Smart Pomodoro System",
-    description: "C++ embedded system project featuring a smart Pomodoro timer with LCD display and LED indicators.",
+    description: "A smart Pomodoro timer application featuring customizable intervals with LCD display and LED indicators.",
     image: pomodoroImage,
-    type: "iot", // Project category
-    tech: ["C++", "Arduino", "LCD", "LED Matrix"],
+    type: "web", // Project category
+    tech: ["C++", "LCD", "LED Matrix"],
     features: ["Custom intervals", "Visual feedback", "Break reminders", "Statistics"],
     isPatented: false,
     github: "#",
