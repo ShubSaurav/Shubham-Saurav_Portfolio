@@ -119,7 +119,7 @@ export const GallerySection = () => {
         <div className="text-center mb-16">
           <p className="text-primary font-medium mb-4 block">Gallery</p>
           <h2 className="font-heading text-3xl md:text-5xl font-bold mb-4">
-            My Creative Moments
+            My <span className="gradient-text">Creative Moments</span>
           </h2>
           <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
             Explore a curated collection of my work and experiences
