@@ -16,6 +16,7 @@ const projects = [
     title: "IoT Weather Monitoring System",
     description: "A patented real-time weather monitoring solution using ESP32, multiple sensors, and cloud integration for data visualization.",
     image: iotImage,
+    type: "iot", // Project category
     tech: ["ESP32", "React", "Node.js", "MongoDB", "MQTT"],
     features: ["Real-time data", "Cloud dashboard", "Mobile alerts", "Historical analysis"],
     isPatented: true,
@@ -26,6 +27,7 @@ const projects = [
     title: "Student Result Portal",
     description: "Full-stack web application for managing and displaying student academic results with role-based authentication.",
     image: studentPortalImage,
+    type: "web", // Project category
     tech: ["React", "Node.js", "Express", "MongoDB", "JWT"],
     features: ["Admin dashboard", "Student portal", "PDF generation", "Secure auth"],
     isPatented: false,
@@ -36,6 +38,7 @@ const projects = [
     title: "FocusMate - Task Manager",
     description: "A Java-based desktop application for task management with Pomodoro timer integration and productivity tracking.",
     image: focusMateImage,
+    type: "web", // Project category
     tech: ["Java", "Swing", "SQLite", "Timer API"],
     features: ["Task scheduling", "Pomodoro timer", "Progress tracking", "Notifications"],
     isPatented: false,
@@ -46,6 +49,7 @@ const projects = [
     title: "Smart Pomodoro System",
     description: "C++ embedded system project featuring a smart Pomodoro timer with LCD display and LED indicators.",
     image: pomodoroImage,
+    type: "iot", // Project category
     tech: ["C++", "Arduino", "LCD", "LED Matrix"],
     features: ["Custom intervals", "Visual feedback", "Break reminders", "Statistics"],
     isPatented: false,
@@ -56,6 +60,7 @@ const projects = [
     title: "Li-Fi Communication System",
     description: "Innovative light-based data transmission system for secure high-speed communication using visible light.",
     image: lifiImage,
+    type: "iot", // Project category
     tech: ["Arduino", "LEDs", "Photodiodes", "C++"],
     features: ["High speed", "Secure", "Low interference", "Prototype ready"],
     isPatented: false,
@@ -66,6 +71,7 @@ const projects = [
     title: "Fire-Fighting Robot",
     description: "Autonomous robot capable of detecting and extinguishing fires using sensors and automated response systems.",
     image: fireRobotImage,
+    type: "iot", // Project category
     tech: ["Arduino", "Sensors", "Motors", "C++"],
     features: ["Fire detection", "Auto navigation", "Water pump", "Remote control"],
     isPatented: false,
@@ -108,6 +114,23 @@ export const ProjectsSection = () => {
             <span className="font-heading text-2xl font-bold text-foreground">{projects.length}+</span>
             <span className="text-muted-foreground">Projects Completed</span>
           </motion.div>
+
+          {/* Category Legend */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex items-center justify-center gap-6 mt-6"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.7)]" />
+              <span className="text-sm text-muted-foreground">IoT & Embedded Systems</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.7)]" />
+              <span className="text-sm text-muted-foreground">Web Applications</span>
+            </div>
+          </motion.div>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -117,7 +140,11 @@ export const ProjectsSection = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-card overflow-hidden group hover-glow"
+              className={`glass-card overflow-hidden group hover-glow ${
+                project.type === "iot" 
+                  ? "border-2 border-yellow-500/60 shadow-[0_0_20px_rgba(234,179,8,0.3)]" 
+                  : "border-2 border-blue-500/60 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+              }`}
             >
               {/* Project Header */}
               <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 overflow-hidden">
