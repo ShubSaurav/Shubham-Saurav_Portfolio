@@ -144,15 +144,6 @@ export const HeroSection = () => {
           </a>
           <a
             href={RESUME_URL || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-outline flex items-center gap-2 w-full sm:w-auto justify-center"
-          >
-            <Download size={20} />
-            View Resume
-          </a>
-          <a
-            href={RESUME_URL || "#"}
             download
             className="btn-outline flex items-center gap-2 w-full sm:w-auto justify-center"
           >
