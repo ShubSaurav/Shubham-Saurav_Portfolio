@@ -8,14 +8,14 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "shubham@example.com",
-    href: "mailto:shubham@example.com",
+    value: "shuhamsaurav2264@gmail.com",
+    href: "mailto:shuhamsaurav2264@gmail.com",
   },
   {
     icon: Phone,
     label: "Phone",
-    value: "+91 XXXXX XXXXX",
-    href: "tel:+91XXXXXXXXXX",
+    value: "+91 78700 99934",
+    href: "tel:+917870099934",
   },
   {
     icon: MapPin,
