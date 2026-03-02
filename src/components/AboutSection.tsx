@@ -74,19 +74,19 @@ export const AboutSection = () => {
             className="space-y-6"
           >
             <p className="text-lg text-muted-foreground leading-relaxed">
-              I am a Computer Science Engineering student (2023–2027) driven by a passion for building intelligent systems that seamlessly connect software, hardware, and artificial intelligence.
+              I am a <span className="text-primary font-semibold">Computer Science Engineering student (2023–2027)</span> driven by a passion for building intelligent systems that seamlessly connect <span className="text-secondary font-semibold">software, hardware, and artificial intelligence</span>.
             </p>
             
             <p className="text-lg text-muted-foreground leading-relaxed">
-              As a Full-Stack Developer, IoT Engineer, and AI enthusiast, I focus on creating end-to-end solutions that are not only technically strong but creatively distinct. I believe every product should stand out in the market — through thoughtful design, smart features, and meaningful user impact. My approach combines innovation, structured problem-solving, and continuous refinement to ensure that what I build is unique, scalable, and future-ready.
+              As a <span className="text-primary font-semibold">Full-Stack Developer</span>, <span className="text-secondary font-semibold">IoT Engineer</span>, and <span className="text-gold font-semibold">AI enthusiast</span>, I focus on creating end-to-end solutions that are not only technically strong but creatively distinct. I believe every product should stand out in the market — through thoughtful design, smart features, and meaningful user impact. My approach combines <span className="text-primary font-semibold">innovation</span>, structured problem-solving, and continuous refinement to ensure that what I build is <span className="text-secondary font-semibold">unique, scalable, and future-ready</span>.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
-              I am a disciplined, hardworking, and highly focused individual who thrives under challenges. I invest time in understanding problems deeply, experimenting with ideas creatively, and executing solutions with precision. My goal is not just to develop systems — but to craft intelligent, impactful, and differentiated experiences.
+              I am a <span className="text-primary font-semibold">disciplined, hardworking, and highly focused</span> individual who thrives under challenges. I invest time in understanding problems deeply, experimenting with ideas creatively, and executing solutions with precision. My goal is not just to develop systems — but to craft <span className="text-secondary font-semibold">intelligent, impactful, and differentiated experiences</span>.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
-              With a professional background in Graphic Design, I naturally integrate visual clarity, user experience, and product thinking into my technical work — ensuring that every solution is powerful, intuitive, and market-ready.
+              With a professional background in <span className="text-gold font-semibold">Graphic Design</span>, I naturally integrate visual clarity, user experience, and product thinking into my technical work — ensuring that every solution is <span className="text-primary font-semibold">powerful, intuitive, and market-ready</span>.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-4">
