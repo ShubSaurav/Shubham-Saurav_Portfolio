@@ -14,7 +14,12 @@ const floatingIcons = [
 
 const PROFILE_IMAGE = import.meta.env.VITE_PROFILE_IMAGE || "/profile-pic/shub.jpeg";
 const FALLBACK_IMAGE = "https://placehold.co/400x400?text=Add+profile.jpg";
-const RESUME_URL = import.meta.env.VITE_RESUME_URL || "#";
+const localResumeFiles = import.meta.glob("../assets/resume/*.pdf", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+const LOCAL_RESUME_URL = Object.values(localResumeFiles)[0] || "";
+const RESUME_URL = import.meta.env.VITE_RESUME_URL || LOCAL_RESUME_URL;
 
 export const HeroSection = () => {
   const [profileSrc, setProfileSrc] = useState(PROFILE_IMAGE);
@@ -137,7 +142,20 @@ export const HeroSection = () => {
             <Folder size={20} />
             View Projects
           </a>
-          <a href={RESUME_URL} download className="btn-outline flex items-center gap-2 w-full sm:w-auto justify-center">
+          <a
+            href={RESUME_URL || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-outline flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <Download size={20} />
+            View Resume
+          </a>
+          <a
+            href={RESUME_URL || "#"}
+            download
+            className="btn-outline flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
             <Download size={20} />
             Download Resume
           </a>
