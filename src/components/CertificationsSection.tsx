@@ -188,6 +188,16 @@ const patentInfo = {
   link: "#",
 };
 
+// Shuffle array using Fisher-Yates algorithm
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 export const CertificationsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -233,7 +243,9 @@ export const CertificationsSection = () => {
   }, [derivedCertifications]);
 
   const filteredCertifications = useMemo(() => {
-    if (activeCategory === "all") return derivedCertifications;
+    if (activeCategory === "all") {
+      return shuffleArray(derivedCertifications);
+    }
     return derivedCertifications.filter((cert) => cert.category === activeCategory);
   }, [activeCategory, derivedCertifications]);
 
