@@ -75,9 +75,11 @@ export const SkillsSection = () => {
               className="glass-card p-6 hover-glow group"
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className={`w-12 h-12 rounded-xl bg-${category.color}/20 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <img src={category.icon} alt={category.title} className="w-8 h-8 object-contain" />
-                </div>
+                <img 
+                  src={category.icon} 
+                  alt={category.title} 
+                  className="w-16 h-16 object-contain group-hover:scale-110 transition-transform" 
+                />
                 <h3 className="font-heading text-xl font-bold text-foreground">
                   {category.title}
                 </h3>
