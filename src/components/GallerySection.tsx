@@ -30,16 +30,21 @@ const formatTitle = (fileName: string) => {
 const extractMetaFromFileName = (filePath: string) => {
   const rawName = filePath.split("/").pop() ?? "Image";
   const baseName = rawName.replace(/\.[^/.]+$/, "").trim();
-  const match = baseName.match(/^(.*?)(?:\s+|[-_])(\d+)$/);
+  
+  // Try to extract number at the end: " 1", "-1", "_1"
+  const match = baseName.match(/^(.+?)[\s_-]+(\d+)$/);
 
   if (!match) {
+    // No number pattern found, return full name
+    const title = formatTitle(baseName);
     return {
-      title: formatTitle(baseName),
-      group: formatTitle(baseName),
+      title,
+      group: title,
       order: Number.MAX_SAFE_INTEGER,
     };
   }
 
+  // Extract group name (everything before the number)
   const group = formatTitle(match[1].trim());
   const order = Number(match[2]);
 
