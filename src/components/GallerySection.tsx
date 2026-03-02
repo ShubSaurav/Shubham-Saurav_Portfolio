@@ -44,7 +44,7 @@ const extractMetaFromFileName = (filePath: string) => {
   const order = Number(match[2]);
 
   return {
-    title: `${group} ${order}`,
+    title: group,
     group,
     order,
   };
