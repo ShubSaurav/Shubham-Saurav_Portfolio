@@ -116,7 +116,7 @@ export const GallerySection = () => {
                   <img
                     src={galleryItems[(currentSlide - 1 + galleryItems.length) % galleryItems.length].file}
                     alt="Previous"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </motion.div>
 
@@ -126,13 +126,13 @@ export const GallerySection = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
-                  className="relative w-3/5 md:w-2/5 h-full rounded-2xl overflow-hidden border-2 border-primary shadow-2xl cursor-pointer z-10"
+                  className="relative w-3/5 md:w-2/5 h-full rounded-2xl overflow-hidden border-2 border-primary shadow-2xl cursor-pointer z-10 bg-slate-900"
                   onClick={() => setSelectedImage(galleryItems[currentSlide].file)}
                 >
                   <img
                     src={galleryItems[currentSlide].file}
                     alt={galleryItems[currentSlide].title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                   
                   {/* Overlay */}
@@ -155,7 +155,7 @@ export const GallerySection = () => {
                   <img
                     src={galleryItems[(currentSlide + 1) % galleryItems.length].file}
                     alt="Next"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </motion.div>
 
@@ -225,7 +225,7 @@ export const GallerySection = () => {
                         e.currentTarget.src = GALLERY_FALLBACK;
                       }
                     }}
-                    className={`w-full h-full object-cover transition-transform duration-500 ${
+                    className={`w-full h-full object-contain transition-transform duration-500 ${
                       hoveredCard === index ? "scale-110" : "scale-100"
                     }`}
                   />
