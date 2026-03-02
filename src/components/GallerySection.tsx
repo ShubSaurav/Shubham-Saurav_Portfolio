@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 type GalleryItem = {
@@ -52,15 +52,6 @@ export const GallerySection = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-
-  // Auto-advance slideshow every 5 seconds
-  useEffect(() => {
-    if (galleryItems.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % galleryItems.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [galleryItems.length]);
 
   const goToPrevious = () => {
     setCurrentSlide((prev) => (prev - 1 + galleryItems.length) % galleryItems.length);
