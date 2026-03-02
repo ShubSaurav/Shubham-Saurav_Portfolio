@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const contactInfo = [
   {
@@ -32,6 +33,77 @@ const socialLinks = [
 export const ContactSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/shubhamsaurav2264@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio Contact from ${formData.name}`,
+          _template: "table",
+          _captcha: "false",
+          _replyto: formData.email,
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || (result && result.success === false)) {
+        const errorMessage =
+          (result && typeof result.message === "string" && result.message) ||
+          "Failed to send message";
+        throw new Error(errorMessage);
+      }
+
+      if (result && typeof result.message === "string" && result.message.toLowerCase().includes("activate")) {
+        throw new Error("Please activate FormSubmit from the confirmation email sent to your inbox first.");
+      }
+
+      toast({
+        title: "Message sent!",
+        description: "Thanks for reaching out. I received your message.",
+      });
+
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Please try again in a moment.";
+
+      if (message.toLowerCase().includes("activate")) {
+        toast({
+          title: "Activation required",
+          description: "Open your inbox and click the FormSubmit activation link once.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Message not sent",
+          description: "Please try again in a moment.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="section-padding relative overflow-hidden bg-card/30">
@@ -110,19 +182,13 @@ export const ContactSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <form
-              action="https://formsubmit.co/shubhamsaurav2264@gmail.com"
-              method="POST"
-              className="glass-card p-8 space-y-6"
-            >
-              <input type="hidden" name="_subject" value="New Portfolio Contact Message" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_captcha" value="false" />
+            <form onSubmit={handleSubmit} className="glass-card p-8 space-y-6">
               <div>
                 <label className="text-foreground font-medium mb-2 block">Name</label>
                 <input
                   type="text"
-                  name="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground transition-all duration-300"
                   placeholder="Your name"
@@ -133,7 +199,8 @@ export const ContactSection = () => {
                 <label className="text-foreground font-medium mb-2 block">Email</label>
                 <input
                   type="email"
-                  name="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground transition-all duration-300"
                   placeholder="your.email@example.com"
@@ -143,7 +210,8 @@ export const ContactSection = () => {
               <div>
                 <label className="text-foreground font-medium mb-2 block">Message</label>
                 <textarea
-                  name="message"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   required
                   rows={5}
                   className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground transition-all duration-300 resize-none"
@@ -153,10 +221,11 @@ export const ContactSection = () => {
               
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="btn-primary w-full flex items-center justify-center gap-2"
               >
                 <Send size={20} />
-                Send Message
+                {isSubmitting ? "Sending..." : "Send Message"}
               </button>
             </form>
           </motion.div>
