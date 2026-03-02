@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 type GalleryItem = {
@@ -52,9 +52,6 @@ export const GallerySection = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const lastScrollRef = useRef<number>(0);
 
   // Auto-advance slideshow every 5 seconds
   useEffect(() => {
@@ -63,33 +60,6 @@ export const GallerySection = () => {
       setCurrentSlide((prev) => (prev + 1) % galleryItems.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [galleryItems.length]);
-
-  // Carousel wheel scroll for navigation
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const now = Date.now();
-      if (now - lastScrollRef.current < 600) return; // 600ms throttle
-      
-      lastScrollRef.current = now;
-      setIsScrolling(true);
-      setTimeout(() => setIsScrolling(false), 400);
-      
-      if (e.deltaY > 0) {
-        setCurrentSlide((prev) => (prev + 1) % galleryItems.length);
-      } else {
-        setCurrentSlide((prev) => (prev - 1 + galleryItems.length) % galleryItems.length);
-      }
-    };
-
-    carousel.addEventListener("wheel", handleWheel, { passive: false });
-    return () => carousel.removeEventListener("wheel", handleWheel);
   }, [galleryItems.length]);
 
   const goToPrevious = () => {
@@ -119,17 +89,14 @@ export const GallerySection = () => {
         <div 
           className="mt-12 rounded-3xl bg-gradient-to-br from-slate-800 via-slate-850 to-slate-900 p-8 transition-all duration-300"
           style={{
-            boxShadow: isScrolling
-              ? "0 0 60px rgba(59, 130, 246, 0.6), inset 0 0 30px rgba(59, 130, 246, 0.2)"
-              : hoveredCard !== null 
-                ? "0 0 50px rgba(59, 130, 246, 0.4)"
-                : "0 0 30px rgba(0, 0, 0, 0.3)",
+            boxShadow: hoveredCard !== null 
+              ? "0 0 50px rgba(59, 130, 246, 0.4)"
+              : "0 0 30px rgba(0, 0, 0, 0.3)",
           }}
         >
           {/* SLIDESHOW AT TOP */}
           {galleryItems.length > 0 && (
             <motion.div
-              ref={carouselRef}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
