@@ -1,36 +1,42 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Code, Server, Cpu, Wrench, Palette } from "lucide-react";
+
+// Import skill icons
+import programmingIcon from "../assets/skills/programing.gif";
+import webIcon from "../assets/skills/web.gif";
+import iotIcon from "../assets/skills/iot.gif";
+import toolsIcon from "../assets/skills/tool.gif";
+import designIcon from "../assets/skills/design.gif";
 
 const skillCategories = [
   {
     title: "Programming",
-    icon: Code,
+    icon: programmingIcon,
     color: "primary",
     skills: ["Java", "C++", "Python", "JavaScript", "SQL"],
   },
   {
     title: "Web & Backend",
-    icon: Server,
+    icon: webIcon,
     color: "secondary",
     skills: ["React", "Node.js", "Express", "MongoDB", "MySQL"],
   },
   {
     title: "IoT & Embedded",
-    icon: Cpu,
+    icon: iotIcon,
     color: "accent",
     skills: ["ESP32", "Arduino", "Sensors", "Cloud Integration", "MQTT"],
   },
   {
     title: "Tools",
-    icon: Wrench,
+    icon: toolsIcon,
     color: "primary",
     skills: ["Git", "GitHub", "Docker", "Postman", "Vercel"],
   },
   {
     title: "Design",
-    icon: Palette,
+    icon: designIcon,
     color: "secondary",
     skills: ["Figma", "CorelDRAW", "Canva", "Illustrator", "UI/UX"],
   },
@@ -70,7 +76,7 @@ export const SkillsSection = () => {
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className={`w-12 h-12 rounded-xl bg-${category.color}/20 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <category.icon className={`w-6 h-6 text-${category.color}`} />
+                  <img src={category.icon} alt={category.title} className="w-8 h-8 object-contain" />
                 </div>
                 <h3 className="font-heading text-xl font-bold text-foreground">
                   {category.title}
