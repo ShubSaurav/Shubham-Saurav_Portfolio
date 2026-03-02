@@ -8,8 +8,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "shuhamsaurav2264@gmail.com",
-    href: "mailto:shuhamsaurav2264@gmail.com",
+    value: "shubhamsaurav2264@gmail.com",
+    href: "mailto:shubhamsaurav2264@gmail.com",
   },
   {
     icon: Phone,
@@ -34,6 +34,7 @@ export const ContactSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -41,23 +42,49 @@ export const ContactSection = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Create mailto link with form data
-    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
-    const mailtoLink = `mailto:shuhamsaurav2264@gmail.com?subject=${subject}&body=${body}`;
-    
-    // Open default email client
-    window.location.href = mailtoLink;
-    
-    toast({
-      title: "Opening email client...",
-      description: "Your default email client will open with the message pre-filled.",
-    });
-    
-    setFormData({ name: "", email: "", message: "" });
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/shubhamsaurav2264@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `Portfolio Contact from ${formData.name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || result.success !== "true") {
+        throw new Error("Failed to send message");
+      }
+
+      toast({
+        title: "Message sent!",
+        description: "Thanks for reaching out. I received your message.",
+      });
+
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      toast({
+        title: "Message not sent",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -176,10 +203,11 @@ export const ContactSection = () => {
               
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="btn-primary w-full flex items-center justify-center gap-2"
               >
                 <Send size={20} />
-                Send Message
+                {isSubmitting ? "Sending..." : "Send Message"}
               </button>
             </form>
           </motion.div>
