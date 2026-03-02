@@ -116,16 +116,14 @@ export const GallerySection = () => {
   return (
     <section id="gallery" className="py-20 bg-muted/30">
       <div className="container-custom">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div>
-            <p className="text-sm font-semibold text-primary">Gallery</p>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold mt-2">
-              My Creative Moments
-            </h2>
-            <p className="text-muted-foreground mt-3 max-w-2xl">
-              Explore a curated collection of my work and experiences
-            </p>
-          </div>
+        <div className="text-center mb-16">
+          <p className="text-primary font-medium mb-4 block">Gallery</p>
+          <h2 className="font-heading text-3xl md:text-5xl font-bold mb-4">
+            My Creative Moments
+          </h2>
+          <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
+            Explore a curated collection of my work and experiences
+          </p>
         </div>
 
         {/* Dark Container with Slideshow + Grid */}
