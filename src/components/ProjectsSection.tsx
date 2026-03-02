@@ -3,11 +3,19 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Github, ExternalLink, Award, Folder } from "lucide-react";
 
+// Import project images
+import iotImage from "../assets/featured-projects/IOT .jpeg";
+import studentPortalImage from "../assets/featured-projects/Student Result Portal 1.jpeg";
+import focusMateImage from "../assets/featured-projects/FocusMate.jpeg";
+import pomodoroImage from "../assets/featured-projects/Smart Pomodoro Scheduler 1.jpeg";
+import lifiImage from "../assets/featured-projects/LIFI Communication System.jpeg";
+import fireRobotImage from "../assets/featured-projects/Fire Fighting Robot.jpeg";
+
 const projects = [
   {
     title: "IoT Weather Monitoring System",
     description: "A patented real-time weather monitoring solution using ESP32, multiple sensors, and cloud integration for data visualization.",
-    image: "🌤️",
+    image: iotImage,
     tech: ["ESP32", "React", "Node.js", "MongoDB", "MQTT"],
     features: ["Real-time data", "Cloud dashboard", "Mobile alerts", "Historical analysis"],
     isPatented: true,
@@ -17,7 +25,7 @@ const projects = [
   {
     title: "Student Result Portal",
     description: "Full-stack web application for managing and displaying student academic results with role-based authentication.",
-    image: "📊",
+    image: studentPortalImage,
     tech: ["React", "Node.js", "Express", "MongoDB", "JWT"],
     features: ["Admin dashboard", "Student portal", "PDF generation", "Secure auth"],
     isPatented: false,
@@ -27,7 +35,7 @@ const projects = [
   {
     title: "FocusMate - Task Manager",
     description: "A Java-based desktop application for task management with Pomodoro timer integration and productivity tracking.",
-    image: "✅",
+    image: focusMateImage,
     tech: ["Java", "Swing", "SQLite", "Timer API"],
     features: ["Task scheduling", "Pomodoro timer", "Progress tracking", "Notifications"],
     isPatented: false,
@@ -37,7 +45,7 @@ const projects = [
   {
     title: "Smart Pomodoro System",
     description: "C++ embedded system project featuring a smart Pomodoro timer with LCD display and LED indicators.",
-    image: "⏱️",
+    image: pomodoroImage,
     tech: ["C++", "Arduino", "LCD", "LED Matrix"],
     features: ["Custom intervals", "Visual feedback", "Break reminders", "Statistics"],
     isPatented: false,
@@ -47,7 +55,7 @@ const projects = [
   {
     title: "Li-Fi Communication System",
     description: "Innovative light-based data transmission system for secure high-speed communication using visible light.",
-    image: "💡",
+    image: lifiImage,
     tech: ["Arduino", "LEDs", "Photodiodes", "C++"],
     features: ["High speed", "Secure", "Low interference", "Prototype ready"],
     isPatented: false,
@@ -57,7 +65,7 @@ const projects = [
   {
     title: "Fire-Fighting Robot",
     description: "Autonomous robot capable of detecting and extinguishing fires using sensors and automated response systems.",
-    image: "🤖",
+    image: fireRobotImage,
     tech: ["Arduino", "Sensors", "Motors", "C++"],
     features: ["Fire detection", "Auto navigation", "Water pump", "Remote control"],
     isPatented: false,
@@ -112,8 +120,12 @@ export const ProjectsSection = () => {
               className="glass-card overflow-hidden group hover-glow"
             >
               {/* Project Header */}
-              <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                <span className="text-6xl">{project.image}</span>
+              <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 overflow-hidden">
+                <img 
+                  src={project.image} 
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
                 
                 {/* Patent Badge */}
                 {project.isPatented && (
