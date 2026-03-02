@@ -184,8 +184,8 @@ const patentInfo = {
   applicationNo: "202411XXXXXX",
   status: "Filed",
   year: "2024",
-  image: "", // Add patent document image
-  link: "#",
+  image: "/patent/IOT-Weather-Monitoring-Patent.pdf",
+  link: "/patent/IOT-Weather-Monitoring-Patent.pdf",
 };
 
 // Shuffle array using Fisher-Yates algorithm
